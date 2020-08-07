@@ -44,6 +44,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.mariadb.jdbc:mariadb-java-client'
 
+    /* Security */
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.2.3.RELEASE'
+    
 }
 
 test {

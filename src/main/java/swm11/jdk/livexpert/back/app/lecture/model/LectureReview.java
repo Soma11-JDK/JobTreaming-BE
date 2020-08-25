@@ -16,6 +16,10 @@ public class LectureReview extends Common implements Serializable {
     @JoinColumn(nullable = false, referencedColumnName = "id")
     private User writer;                                                // 작성자
 
+    @ManyToOne
+    @JoinColumn(nullable = false, referencedColumnName = "id")
+    private Lecture lecture;                                            // 강연
+
     @Column(nullable = false, length = 100)
     private String contents;                                            // 후기 내용
 

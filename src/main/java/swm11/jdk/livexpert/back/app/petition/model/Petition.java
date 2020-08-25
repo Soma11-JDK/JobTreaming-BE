@@ -7,8 +7,8 @@ import swm11.jdk.livexpert.back.app.user.model.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "petition")
@@ -26,6 +26,6 @@ public class Petition extends Common implements Serializable {
     @ManyToMany
     @JoinTable(name = "petition_likes", joinColumns = @JoinColumn(name = "petition_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> likes = new ArrayList<>();               // 추가로 청원을 신청한 사람
+    private Set<User> likes = new HashSet<>();                  // 추가로 청원을 신청한 사람
 
 }

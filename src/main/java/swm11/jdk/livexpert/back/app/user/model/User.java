@@ -51,7 +51,7 @@ public class User extends Common implements Serializable {
     @Enumerated(EnumType.STRING)
     private UserRole role;                                      // 사용자 역할할
 
-   @Setter
+    @Setter
     @Column(nullable = false)
     private String imageURL;                                    // 이미지 경로
 

@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface PetitionService {
 
-    List<Petition> findAll();
+    List<Petition> findAll(Integer pageNum);
 
     Optional<Petition> findById(Long id);
 

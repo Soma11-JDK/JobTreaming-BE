@@ -10,6 +10,8 @@ public interface PetitionService {
 
     List<Petition> findAll(Integer pageNum);
 
+    List<Petition> findTop10ByLikes();
+
     Optional<Petition> findById(Long id);
 
     Petition save(Petition petition);

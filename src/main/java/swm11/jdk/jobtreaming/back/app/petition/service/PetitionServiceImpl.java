@@ -28,6 +28,11 @@ public class PetitionServiceImpl implements PetitionService {
     }
 
     @Override
+    public List<Petition> findTop10ByLikes() {
+        return petitionRepository.findTop6ByLikes();
+    }
+
+    @Override
     public Optional<Petition> findById(Long id) {
         return petitionRepository.findById(id);
     }

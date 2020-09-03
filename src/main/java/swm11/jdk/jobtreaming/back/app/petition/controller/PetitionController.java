@@ -22,10 +22,17 @@ public class PetitionController {
 
     private PetitionService petitionService;
 
-    @ApiOperation("강연 청원 목록 조회")
+    @ApiOperation("전체 강연 청원 목록 조회")
     @GetMapping(value = "/list")
     public ResponseEntity list(@RequestParam(defaultValue = "1", required = false) Integer pageNum) {
         List<Petition> petitionList = petitionService.findAll(pageNum - 1);
+        return ResponseEntity.ok(petitionList);
+    }
+
+    @ApiOperation("인기 강연 청원 목록 조회")
+    @GetMapping(value = "/hot")
+    public ResponseEntity hot() {
+        List<Petition> petitionList = petitionService.findTop10ByLikes();
         return ResponseEntity.ok(petitionList);
     }
 

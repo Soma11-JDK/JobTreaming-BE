@@ -42,16 +42,23 @@ public class ExpertSpecificationServiceImpl implements ExpertSpecificationServic
 
     @Override
     public ExpertSpecification save(ExpertSpecification expertSpecification) {
+        // TODO 파일을 스토리지에 업로드 및 파일 이름 or URL set 필요
         return expertSpecificationRepository.save(expertSpecification);
     }
 
     @Override
-    public void delete(Long id) {
-        expertSpecificationRepository.deleteById(id);
+    public void saveAll(List<ExpertSpecification> expertSpecificationList) {
+        expertSpecificationList.forEach(this::save);
+    }
+
+    @Override
+    public void delete(ExpertSpecification expertSpecification) {
+        // TODO 파일을 스토리지에서 삭제하는 작업 추가 필요
+        expertSpecificationRepository.deleteById(expertSpecification.getId());
     }
 
     @Override
     public void deleteAllByExpertId(Long expertId) {
-        expertSpecificationRepository.findAllByExpert_Id(expertId).forEach(e -> expertSpecificationRepository.delete(e));
+        expertSpecificationRepository.findAllByExpert_Id(expertId).forEach(this::delete);
     }
 }

@@ -19,7 +19,9 @@ public interface ExpertSpecificationService {
 
     ExpertSpecification save(ExpertSpecification expertSpecification);
 
-    void delete(Long id);
+    void saveAll(List<ExpertSpecification> expertSpecificationList);
+
+    void delete(ExpertSpecification expertSpecification);
 
     void deleteAllByExpertId(Long expertId);
 }

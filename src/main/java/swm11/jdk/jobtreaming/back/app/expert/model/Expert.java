@@ -6,7 +6,10 @@ import org.hibernate.annotations.DynamicUpdate;
 import swm11.jdk.jobtreaming.back.app.common.model.Common;
 import swm11.jdk.jobtreaming.back.app.lecture.model.Lecture;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +21,8 @@ import java.util.List;
 @DynamicUpdate
 public class Expert extends Common implements Serializable {
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String about;                                             // 소개글
+    @Column(nullable = false, columnDefinition = "TEXT default ''")
+    private String about = "";                                        // 소개글
 
     @OneToMany(mappedBy = "expert")
     private List<Lecture> lectureList = new ArrayList<>();            // 강연 목록

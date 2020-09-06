@@ -39,7 +39,7 @@ public class PetitionController {
     @ApiOperation("새로운 강연 청원 추가")
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(value = "/add")
-    public ResponseEntity add(@RequestParam Petition petition) {
+    public ResponseEntity add(@RequestBody Petition petition) {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         petition.setUser(userDetails.getUser());
         petitionService.save(petition);
@@ -50,7 +50,7 @@ public class PetitionController {
     @ApiOperation("강연 청원 수정")
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(value = "/modify")
-    public ResponseEntity modify(@RequestParam Petition petition) {
+    public ResponseEntity modify(@RequestBody Petition petition) {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userDetails.getId().equals(petition.getUser().getId())) {
             petitionService.save(petition);
@@ -62,7 +62,7 @@ public class PetitionController {
     @ApiOperation("강연 청원 좋아요")
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(value = "/like")
-    public ResponseEntity like(@RequestParam Petition petition) {
+    public ResponseEntity like(@RequestBody Petition petition) {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         petitionService.like(petition, userDetails.getUser());
         return ResponseEntity.ok().build();

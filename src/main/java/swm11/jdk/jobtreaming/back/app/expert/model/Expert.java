@@ -1,15 +1,13 @@
 package swm11.jdk.jobtreaming.back.app.expert.model;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import swm11.jdk.jobtreaming.back.app.common.model.Common;
 import swm11.jdk.jobtreaming.back.app.lecture.model.Lecture;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,4 +28,8 @@ public class Expert extends Common implements Serializable {
     @OneToMany(mappedBy = "expert")
     private List<Lecture> specificationList = new ArrayList<>();      // 스펙 목록
 
+    @Setter
+    @OneToOne
+    @JoinColumn(name = "expert_rating_id", referencedColumnName = "id")
+    private ExpertRating expertRating;                                // 전문가 정보
 }

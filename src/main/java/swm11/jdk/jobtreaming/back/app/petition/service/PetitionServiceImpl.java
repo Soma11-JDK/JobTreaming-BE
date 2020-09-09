@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import swm11.jdk.jobtreaming.back.app.petition.model.Petition;
 import swm11.jdk.jobtreaming.back.app.petition.repository.PetitionRepository;
 import swm11.jdk.jobtreaming.back.app.user.model.User;
+import swm11.jdk.jobtreaming.constants.PageConstants;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,11 +20,10 @@ public class PetitionServiceImpl implements PetitionService {
 
     @NonNull
     private PetitionRepository petitionRepository;
-    private final int pageSize = 10;
 
     @Override
     public List<Petition> findAll(Integer pageNum) {
-        Page<Petition> petitionPage = petitionRepository.findAll(PageRequest.of(pageNum, pageSize));
+        Page<Petition> petitionPage = petitionRepository.findAll(PageRequest.of(pageNum, PageConstants.pageSize));
         return petitionPage.getContent();
     }
 

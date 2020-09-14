@@ -1,6 +1,7 @@
 package swm11.jdk.jobtreaming.back.app.expert.model;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import swm11.jdk.jobtreaming.back.app.common.model.Common;
@@ -16,6 +17,7 @@ import java.io.Serializable;
 @DynamicUpdate
 public class ExpertEvaluation extends Common implements Serializable {
 
+    @Setter
     @ManyToOne
     @JoinColumn(nullable = false, referencedColumnName = "id")
     private User writer;                                                  // 작성자

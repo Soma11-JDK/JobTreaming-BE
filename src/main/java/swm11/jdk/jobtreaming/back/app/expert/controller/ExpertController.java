@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import swm11.jdk.jobtreaming.back.app.expert.model.Expert;
+import swm11.jdk.jobtreaming.back.app.expert.model.ExpertRating;
 import swm11.jdk.jobtreaming.back.app.expert.model.ExpertSpecification;
 import swm11.jdk.jobtreaming.back.app.expert.service.ExpertService;
 import swm11.jdk.jobtreaming.back.app.expert.service.ExpertSpecificationService;
@@ -32,9 +33,16 @@ public class ExpertController {
     @PostMapping(value = "/register")
     public ResponseEntity register(@RequestBody Expert expert, @RequestBody List<ExpertSpecification> specificationList) {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        userDetails.setExpert(expert);
+
+        // 전문가 테이블 추가
+        userDetails.getUser().setExpert(expert);
         userService.save(userDetails.getUser());
 
+        // 전문가 평점 테이블 추가
+        userDetails.getExpert().setExpertRating(new ExpertRating());
+        expertService.save(userDetails.getExpert());
+
+        // 전문가 스펙 추가
         specificationList.forEach(s -> s.setExpert(userDetails.getExpert()));
         expertSpecificationService.saveAll(specificationList);
         return ResponseEntity.ok().build();

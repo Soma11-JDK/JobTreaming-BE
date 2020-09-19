@@ -1,7 +1,7 @@
 package swm11.jdk.jobtreaming.back.app.expert.model;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import swm11.jdk.jobtreaming.back.app.common.model.Common;
@@ -16,30 +16,25 @@ import java.io.Serializable;
 @Getter
 @DynamicInsert
 @DynamicUpdate
+@Builder
 public class ExpertRating extends Common implements Serializable {
 
-    @Setter
-    @Column(nullable = false, columnDefinition = "double precision default '0'")
-    private double rating1;                                             // 첫번째 항목 점수
+    @Column(nullable = false, columnDefinition = "integer default '0'")
+    private final int rating1;                                             // 첫번째 항목 점수
 
-    @Setter
-    @Column(nullable = false, columnDefinition = "double precision default '0'")
-    private double rating2;                                             // 두번째 항목 점수
+    @Column(nullable = false, columnDefinition = "integer default '0'")
+    private final int rating2;                                             // 두번째 항목 점수
 
-    @Setter
-    @Column(nullable = false, columnDefinition = "double precision default '0'")
-    private double rating3;                                             // 세번째 항목 점수
+    @Column(nullable = false, columnDefinition = "integer default '0'")
+    private final int rating3;                                             // 세번째 항목 점수
 
-    @Setter
-    @Column(nullable = false, columnDefinition = "double precision default '0'")
-    private double rating4;                                             // 네번째 항목 점수
+    @Column(nullable = false, columnDefinition = "integer default '0'")
+    private final int rating4;                                             // 네번째 항목 점수
 
-    @Setter
-    @Column(nullable = false, columnDefinition = "double precision default '0'")
-    private double rating5;                                             // 다섯번째 항목 점수
+    @Column(nullable = false, columnDefinition = "integer default '0'")
+    private final int rating5;                                             // 다섯번째 항목 점수
 
-    @Setter
-    @Column(nullable = false, columnDefinition = "double precision default '0'")
-    private double rating6;                                             // 여섯번째 항목 점수
+    @Column(nullable = false, columnDefinition = "integer default '0'")
+    private final int rating6;                                             // 여섯번째 항목 점수
 
 }

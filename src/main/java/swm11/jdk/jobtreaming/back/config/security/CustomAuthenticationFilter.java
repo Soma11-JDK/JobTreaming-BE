@@ -1,4 +1,4 @@
-package swm11.jdk.jobtreaming.back.config.web;
+package swm11.jdk.jobtreaming.back.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;

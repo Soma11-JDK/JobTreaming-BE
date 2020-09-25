@@ -1,4 +1,4 @@
-package swm11.jdk.jobtreaming.back.config.web;
+package swm11.jdk.jobtreaming.back.config.security;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

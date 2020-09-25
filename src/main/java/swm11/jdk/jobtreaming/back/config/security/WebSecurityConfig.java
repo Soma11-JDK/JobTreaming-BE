@@ -1,4 +1,4 @@
-package swm11.jdk.jobtreaming.back.config.web;
+package swm11.jdk.jobtreaming.back.config.security;
 
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import swm11.jdk.jobtreaming.back.config.security.CustomAuthenticationFilter;
+import swm11.jdk.jobtreaming.back.config.security.CustomAuthenticationProvider;
 import swm11.jdk.jobtreaming.back.handler.CustomLoginSuccessHandler;
 
 @Configuration

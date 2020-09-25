@@ -1,4 +1,4 @@
-package swm11.jdk.jobtreaming.back.config.web;
+package swm11.jdk.jobtreaming.back.config.json;
 
 import com.google.gson.Gson;
 import org.springframework.context.annotation.Bean;

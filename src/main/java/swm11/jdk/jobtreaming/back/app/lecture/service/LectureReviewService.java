@@ -6,17 +6,18 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LectureReviewService {
-    
-    List<LectureReview> findAll();
 
-    List<LectureReview> findAllByWriterId(Long writerId);
+    List<LectureReview> findAll(int pageNum);
 
-    List<LectureReview> findAllByLectureId(Long lectureId);
+    List<LectureReview> findAllByWriterId(Long writerId, int pageNum);
+
+    List<LectureReview> findAllByLectureId(Long lectureId, int pageNum);
 
     Optional<LectureReview> findById(Long id);
 
     LectureReview save(LectureReview lectureReview);
 
     void delete(Long id);
-    
+
+    boolean isNotDuplicated(LectureReview lectureReview, Long writerId);
 }

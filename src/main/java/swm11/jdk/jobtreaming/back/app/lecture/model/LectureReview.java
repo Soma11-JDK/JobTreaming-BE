@@ -1,6 +1,7 @@
 package swm11.jdk.jobtreaming.back.app.lecture.model;
 
 import lombok.Getter;
+import lombok.Setter;
 import swm11.jdk.jobtreaming.back.app.common.model.Common;
 import swm11.jdk.jobtreaming.back.app.user.model.User;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
 @Getter
 public class LectureReview extends Common implements Serializable {
 
+    @Setter
     @ManyToOne
     @JoinColumn(nullable = false, referencedColumnName = "id")
     private User writer;                                                // 작성자

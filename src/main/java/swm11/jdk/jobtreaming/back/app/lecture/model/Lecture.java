@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.web.multipart.MultipartFile;
 import swm11.jdk.jobtreaming.back.app.common.model.Common;
 import swm11.jdk.jobtreaming.back.app.expert.model.Expert;
 import swm11.jdk.jobtreaming.back.app.user.model.User;
@@ -23,6 +24,7 @@ import java.util.List;
 @DynamicUpdate
 public class Lecture extends Common implements Serializable {
 
+    @Setter
     @ManyToOne
     @JoinColumn(nullable = false, referencedColumnName = "id")
     private Expert expert;                                            // 강연자
@@ -60,7 +62,7 @@ public class Lecture extends Common implements Serializable {
 
     @ManyToMany
     @JoinTable(name = "lecture_student", joinColumns = @JoinColumn(name = "lecture_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id"))
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> students = new ArrayList<>();                    // 신청자
 
     @OneToMany(mappedBy = "lecture")
@@ -80,6 +82,9 @@ public class Lecture extends Common implements Serializable {
     private String keywords;                                            // 키워드
 
     @Transient
+    private List<MultipartFile> uploadFiles;                            // 첨부된 파일
+
+    @Column(columnDefinition = "double precision default '0'")
     private double avgRating;                                           // 평균 평점
 
 }

@@ -1,6 +1,7 @@
 package swm11.jdk.jobtreaming.back.app.lecture.model;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import swm11.jdk.jobtreaming.back.app.common.model.AbstractBoard;
@@ -23,6 +24,7 @@ public class LectureQuestion extends AbstractBoard implements Serializable {
     @JoinColumn(name = "lecture_id", nullable = false, referencedColumnName = "id")
     private Lecture lecture;                                          // 강연
 
+    @Setter
     @ManyToOne
     @JoinColumn(nullable = false, referencedColumnName = "id")
     private User writer;                                              // 작성자

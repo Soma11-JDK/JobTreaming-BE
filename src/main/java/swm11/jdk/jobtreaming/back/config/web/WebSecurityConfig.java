@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
                 .and()
                 // 토큰을 활용하면 세션이 필요 없으므로 STATELESS로 설정하여 Session을 사용하지 않는다.
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and()
                 // form 기반의 로그인에 대해 비활성화 한다.
                 .formLogin()

@@ -2,25 +2,30 @@ package swm11.jdk.jobtreaming.back.app.user.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
+import swm11.jdk.jobtreaming.back.app.expert.model.Expert;
+import swm11.jdk.jobtreaming.back.app.user.model.MyUserDetails;
 import swm11.jdk.jobtreaming.back.app.user.model.User;
 import swm11.jdk.jobtreaming.back.app.user.service.UserService;
-
-import javax.annotation.Resource;
 
 @Api(description = "사용자 API")
 @RestController
 @RequestMapping("/user")
+@AllArgsConstructor
 public class UserController {
 
-    @Resource(name = "userService")
     private UserService userService;
+    private UserDetailsService userDetailsService;
 
     @ApiOperation("회원 가입")
     @PostMapping(value = "/signUp")
-    public ResponseEntity add(@RequestBody User user) {
+    public ResponseEntity signUp(@RequestBody User user) {
         return ResponseEntity.ok(userService.save(user));
     }
 
@@ -61,6 +66,14 @@ public class UserController {
     public ResponseEntity delete(@PathVariable("id") Long id) {
         userService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation("소셜 로그인")
+    @GetMapping(value = "/socialLogin")
+    public ResponseEntity socialLogin() {
+        MyUserDetails userDetails = (MyUserDetails) userDetailsService.loadUserByUsername("test");
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
+        return ResponseEntity.ok("테스트 로그인 성공");
     }
 
 }

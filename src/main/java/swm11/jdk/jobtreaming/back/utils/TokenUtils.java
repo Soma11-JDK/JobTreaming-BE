@@ -3,21 +3,13 @@ package swm11.jdk.jobtreaming.back.utils;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 import swm11.jdk.jobtreaming.back.app.user.model.User;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-@Component
 @RequiredArgsConstructor
 @Log4j2
 public final class TokenUtils {
@@ -34,29 +26,22 @@ public final class TokenUtils {
         return builder.compact();
     }
 
-    public static boolean isValidToken(String token) {
+    public static Optional isValidToken(String token) {
         try {
             Claims claims = getClaimsFormToken(token);
 
             log.info("expireTime :" + claims.getExpiration());
             log.info("email :" + claims.get("email"));
-            return true;
+            return Optional.of(claims);
 
         } catch (ExpiredJwtException exception) {
             log.error("Token Expired");
-            return false;
         } catch (JwtException exception) {
             log.error("Token Tampered");
-            return false;
         } catch (NullPointerException exception) {
             log.error("Token is null");
-            return false;
         }
-    }
-
-    public static Authentication createAuthenticationFromToken(UserDetails userDetails) {
-        // it is rather safe to return Authentication with NULL credentials if you do not require to use user credentials after successful authentication.
-        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        return Optional.empty();
     }
 
     public static String getTokenFromHeader(String header) {
@@ -65,7 +50,7 @@ public final class TokenUtils {
 
     private static Date createExpireDateForOneYear() {
         // 토큰 만료시간은 30일으로 설정
-        Calendar c= Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, 30);
         return c.getTime();
     }
@@ -98,7 +83,7 @@ public final class TokenUtils {
                 .parseClaimsJws(token).getBody();
     }
 
-    private static String getEmailFromToken(String token) {
+    public static String getEmailFromToken(String token) {
         Claims claims = getClaimsFormToken(token);
         return (String) claims.get("email");
     }

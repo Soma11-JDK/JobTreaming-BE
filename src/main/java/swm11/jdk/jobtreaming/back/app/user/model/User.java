@@ -42,6 +42,7 @@ public class User extends Common implements Serializable {
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private LocalDateTime birth;                                // 생년월일
 
+    @Setter
     @OneToOne
     @JoinColumn(name = "expert_id", referencedColumnName = "id")
     private Expert expert;                                      // 전문가 정보

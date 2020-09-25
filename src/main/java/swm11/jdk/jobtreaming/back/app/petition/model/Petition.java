@@ -22,7 +22,7 @@ public class Petition extends AbstractBoard implements Serializable {
     @JoinColumn(nullable = false, referencedColumnName = "id")
     private User user;                                          // 최초 등록한 사람
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(name = "petition_likes", joinColumns = @JoinColumn(name = "petition_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> likes = new HashSet<>();                  // 추가로 청원을 신청한 사람

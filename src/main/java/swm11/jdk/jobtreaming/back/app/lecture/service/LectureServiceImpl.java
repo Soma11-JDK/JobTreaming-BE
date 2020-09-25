@@ -6,11 +6,10 @@ import swm11.jdk.jobtreaming.back.app.lecture.model.Lecture;
 import swm11.jdk.jobtreaming.back.app.lecture.repository.LectureRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Service("lectureService")
-public class LectureServiceImpl implements LectureService{
+public class LectureServiceImpl implements LectureService {
 
     private LectureRepository lectureRepository;
 
@@ -26,6 +25,7 @@ public class LectureServiceImpl implements LectureService{
 
     @Override
     public Lecture save(Lecture lecture) {
+        // TODO 파일을 스토리지에 업로드 및 파일 이름 or URL set 필요
         return lectureRepository.save(lecture);
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import swm11.jdk.jobtreaming.back.app.petition.model.Petition;
 import swm11.jdk.jobtreaming.back.app.petition.repository.PetitionRepository;
 import swm11.jdk.jobtreaming.back.app.user.model.User;
-import swm11.jdk.jobtreaming.constants.PageConstants;
+import swm11.jdk.jobtreaming.back.constants.PageConstants;
 
 import java.util.List;
 import java.util.Optional;

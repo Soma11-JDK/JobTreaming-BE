@@ -1,4 +1,4 @@
-package swm11.jdk.jobtreaming.constants;
+package swm11.jdk.jobtreaming.back.constants;
 
 import lombok.Value;
 

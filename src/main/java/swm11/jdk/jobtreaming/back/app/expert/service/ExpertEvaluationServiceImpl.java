@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import swm11.jdk.jobtreaming.back.app.expert.model.ExpertEvaluation;
 import swm11.jdk.jobtreaming.back.app.expert.repository.ExpertEvaluationRepository;
-import swm11.jdk.jobtreaming.constants.PageConstants;
+import swm11.jdk.jobtreaming.back.constants.PageConstants;
 
 import java.util.List;
 import java.util.Optional;

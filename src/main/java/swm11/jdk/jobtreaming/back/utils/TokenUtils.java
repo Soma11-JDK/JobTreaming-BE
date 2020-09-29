@@ -4,11 +4,15 @@ import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import swm11.jdk.jobtreaming.back.app.user.model.User;
+import swm11.jdk.jobtreaming.back.enums.user.UserRole;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.*;
+
+import static swm11.jdk.jobtreaming.back.constants.AuthConstants.CLAIMS_EMAIL;
+import static swm11.jdk.jobtreaming.back.constants.AuthConstants.CLAIMS_ROLE;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -26,12 +30,13 @@ public final class TokenUtils {
         return builder.compact();
     }
 
-    public static Optional isValidToken(String token) {
+    public static Optional<Claims> isValidToken(String token) {
         try {
             Claims claims = getClaimsFormToken(token);
 
             log.info("expireTime :" + claims.getExpiration());
-            log.info("email :" + claims.get("email"));
+            log.info("email :" + claims.get(CLAIMS_EMAIL));
+            log.info("role:" + claims.get(CLAIMS_ROLE));
             return Optional.of(claims);
 
         } catch (ExpiredJwtException exception) {
@@ -68,8 +73,8 @@ public final class TokenUtils {
     private static Map<String, Object> createClaims(User user) {
         // 비공개 클레임으로 사용자의 이메일을 설정, 세션처럼 정보를 넣고 빼서 쓸 수 있다.
         Map<String, Object> claims = new HashMap<>();
-        claims.put("email", user.getEmail());
-
+        claims.put(CLAIMS_EMAIL, user.getEmail());
+        claims.put(CLAIMS_ROLE, user.getRole());
         return claims;
     }
 
@@ -83,9 +88,11 @@ public final class TokenUtils {
                 .parseClaimsJws(token).getBody();
     }
 
-    public static String getEmailFromToken(String token) {
-        Claims claims = getClaimsFormToken(token);
-        return (String) claims.get("email");
+    public static String getEmailFromClaims(Claims claims) {
+        return (String) claims.get(CLAIMS_EMAIL);
     }
 
+    public static UserRole getRoleFromClaims(Claims claims) {
+        return (UserRole) claims.get(CLAIMS_ROLE);
+    }
 }

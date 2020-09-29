@@ -13,7 +13,7 @@ public enum Category implements EnumMapperType {
     FOOD("음식서비스"),
     MACHINE("기계"),
     CHEMISTRY("화학"),
-    ELECTRONIC("전가.전자"),
+    ELECTRONIC("전기.전자"),
     IT("정보통신");
 
     @Getter

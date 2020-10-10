@@ -8,6 +8,7 @@ import swm11.jdk.jobtreaming.back.enums.common.EnumMapperType;
 public enum UserRole implements EnumMapperType {
 
     ROLE_USER("사용자"),
+    ROLE_EXPERT("현직자"),
     ROLE_ADMIN("관리자");
 
     @Getter

@@ -9,12 +9,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import swm11.jdk.jobtreaming.back.app.expert.model.Expert;
-import swm11.jdk.jobtreaming.back.app.expert.model.ExpertRating;
 import swm11.jdk.jobtreaming.back.app.expert.model.ExpertSpecification;
 import swm11.jdk.jobtreaming.back.app.expert.service.ExpertService;
 import swm11.jdk.jobtreaming.back.app.expert.service.ExpertSpecificationService;
 import swm11.jdk.jobtreaming.back.app.user.model.MyUserDetails;
 import swm11.jdk.jobtreaming.back.app.user.service.UserService;
+import swm11.jdk.jobtreaming.back.enums.user.UserRole;
 
 import java.util.List;
 
@@ -35,11 +35,11 @@ public class ExpertController {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         // 전문가 테이블 추가
-        userDetails.getUser().setExpert(expert);
+        userDetails.setExpert(expert);
+        userDetails.setRole(UserRole.ROLE_EXPERT);
         userService.save(userDetails.getUser());
 
         // 전문가 평점 테이블 추가
-        userDetails.getExpert().setExpertRating(new ExpertRating());
         expertService.save(userDetails.getExpert());
 
         // 전문가 스펙 추가

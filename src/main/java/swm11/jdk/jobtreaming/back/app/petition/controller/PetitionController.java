@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import swm11.jdk.jobtreaming.back.app.petition.model.Petition;
 import swm11.jdk.jobtreaming.back.app.petition.service.PetitionService;
 import swm11.jdk.jobtreaming.back.app.user.model.MyUserDetails;
-import swm11.jdk.jobtreaming.back.app.user.model.User;
 import swm11.jdk.jobtreaming.back.app.user.service.UserService;
-import swm11.jdk.jobtreaming.back.utils.TokenUtils;
 
 import java.util.List;
 
@@ -34,7 +32,6 @@ public class PetitionController {
     }
 
     @ApiOperation("인기 강연 청원 목록 조회")
-    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value = "/hot")
     public ResponseEntity hot() {
         List<Petition> petitionList = petitionService.findTop10ByLikes();
@@ -42,12 +39,11 @@ public class PetitionController {
     }
 
     @ApiOperation("새로운 강연 청원 추가")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping(value = "/add")
     public ResponseEntity add(@RequestBody Petition petition) {
-        //MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //petition.setUser(userDetails.getUser());
-        User user = userService.findByEmail("test").get();
-        petition.setUser(user);
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        petition.setUser(userDetails.getUser());
         petitionService.save(petition);
 
         return ResponseEntity.ok().build();

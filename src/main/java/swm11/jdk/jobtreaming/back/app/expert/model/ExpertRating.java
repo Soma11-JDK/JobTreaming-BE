@@ -1,5 +1,6 @@
 package swm11.jdk.jobtreaming.back.app.expert.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.DynamicInsert;
@@ -17,6 +18,7 @@ import java.io.Serializable;
 @DynamicInsert
 @DynamicUpdate
 @Builder
+@AllArgsConstructor
 public class ExpertRating extends Common implements Serializable {
 
     @Column(nullable = false, columnDefinition = "integer default '0'")

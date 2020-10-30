@@ -8,6 +8,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import swm11.jdk.jobtreaming.back.config.security.JwtInterceptor;
 
+import java.util.Arrays;
+
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
@@ -30,7 +32,13 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor())
-                .addPathPatterns("/user/findAll");
+                .addPathPatterns(Arrays.asList("/expert/register", "/expert/list", "/expert/register", "/expert/delete"))
+                .addPathPatterns(Arrays.asList("/evaluation/listAll", "/evaluation/add", "/evaluation/modify", "/evaluation/delete"))
+                .addPathPatterns(Arrays.asList("/answer/listAll", "/answer/myList", "/answer/add", "/answer/modify", "/answer/delete"))
+                .addPathPatterns(Arrays.asList("/question/listAll", "/question/myList", "/question/add", "/question/modify", "/question/delete"))
+                .addPathPatterns(Arrays.asList("/review/listAll", "/review/myList", "/review/add", "/review/modify", "/review/delete"))
+                .addPathPatterns(Arrays.asList("/petition/add", "/petition/modify", "/petition/delete"))
+                .addPathPatterns(Arrays.asList("/user/modify", "/user/delete"));
     }
 
     @Bean

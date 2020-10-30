@@ -9,10 +9,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
-import swm11.jdk.jobtreaming.back.app.expert.model.Expert;
 import swm11.jdk.jobtreaming.back.app.user.model.MyUserDetails;
 import swm11.jdk.jobtreaming.back.app.user.model.User;
 import swm11.jdk.jobtreaming.back.app.user.service.UserService;
+import swm11.jdk.jobtreaming.back.utils.TokenUtils;
 
 @Api(description = "사용자 API")
 @RestController
@@ -38,14 +38,12 @@ public class UserController {
     }
 
     @ApiOperation("전체 사용자 목록 조회")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/list")
     public ResponseEntity list() {
         return ResponseEntity.ok(userService.findAll());
     }
 
     @ApiOperation("특정 사용자 상세 조회")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/{id}")
     public ResponseEntity findById(@PathVariable("id") Long id) {
         return userService.findById(id)
@@ -74,6 +72,12 @@ public class UserController {
         MyUserDetails userDetails = (MyUserDetails) userDetailsService.loadUserByUsername("test");
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
         return ResponseEntity.ok("테스트 로그인 성공");
+    }
+
+    @ApiOperation("테스트 로그인")
+    @GetMapping(value = "/testLogin")
+    public ResponseEntity testLogin() {
+        return ResponseEntity.ok(TokenUtils.generateJwtToken(userService.findByEmail("test@test.test").get()));
     }
 
 }

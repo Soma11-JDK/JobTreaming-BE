@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import swm11.jdk.jobtreaming.back.app.lecture.model.Lecture;
 import swm11.jdk.jobtreaming.back.app.lecture.repository.LectureRepository;
+import swm11.jdk.jobtreaming.back.app.user.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service("lectureService")
@@ -28,4 +30,10 @@ public class LectureServiceImpl implements LectureService {
         // TODO 파일을 스토리지에 업로드 및 파일 이름 or URL set 필요
         return lectureRepository.save(lecture);
     }
+
+    @Override
+    public Optional<Lecture> isValidUser(Long lectureId, User user) {
+        return lectureRepository.findByIdAndStudentsContaining(lectureId, user);
+    }
+
 }

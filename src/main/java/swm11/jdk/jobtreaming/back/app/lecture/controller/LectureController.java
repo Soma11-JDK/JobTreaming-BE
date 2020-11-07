@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import swm11.jdk.jobtreaming.back.app.lecture.model.Lecture;
 import swm11.jdk.jobtreaming.back.app.lecture.service.LectureService;
 import swm11.jdk.jobtreaming.back.app.user.model.MyUserDetails;
+import swm11.jdk.jobtreaming.back.utils.LectureUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,9 +56,11 @@ public class LectureController {
 
     @ApiOperation("새로운 강연 추가")
     @PostMapping(value = "/add")
-    public ResponseEntity add(@RequestBody Lecture lecture) {
+    public ResponseEntity add(@RequestBody Lecture lecture) throws InvalidKeyException, NoSuchAlgorithmException {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         lecture.setExpert(userDetails.getExpert());
+        lecture = lectureService.save(lecture);
+        lecture.setPassword(String.valueOf(LectureUtils.generatePassword(String.valueOf(lecture.getId()))));
         return ResponseEntity.ok(lectureService.save(lecture));
     }
 
@@ -66,6 +72,21 @@ public class LectureController {
             return ResponseEntity.ok(lectureService.save(lecture));
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @ApiOperation("강연 참여")
+    @PostMapping(value = "/join")
+    public ResponseEntity join(HttpServletRequest request) throws NoSuchAlgorithmException, InvalidKeyException {
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long lectureId = Long.valueOf(request.getHeader("lectureId"));
+        lectureService.isValidUser(lectureId, userDetails.getUser()).orElseThrow(InvalidKeyException::new);
+
+        String password = request.getHeader("password");
+        if (LectureUtils.enableJoin(lectureId, password)) {
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
 }

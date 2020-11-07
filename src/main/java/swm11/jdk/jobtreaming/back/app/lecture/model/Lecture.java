@@ -87,4 +87,7 @@ public class Lecture extends Common implements Serializable {
     @Column(columnDefinition = "double precision default '0'")
     private double avgRating;                                           // 평균 평점
 
+    @Setter
+    @Column(nullable = false)
+    private String password;                                            // 강연 비밀번호
 }

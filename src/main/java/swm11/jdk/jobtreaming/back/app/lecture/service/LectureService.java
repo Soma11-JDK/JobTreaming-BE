@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface LectureService {
 
+    Optional<Lecture> findById(Long id);
+
     List<Lecture> findAllByQuery(String query);
 
     List<Lecture> findAll();

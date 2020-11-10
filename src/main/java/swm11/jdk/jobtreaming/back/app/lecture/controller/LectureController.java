@@ -7,9 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import swm11.jdk.jobtreaming.back.app.common.model.Common;
 import swm11.jdk.jobtreaming.back.app.lecture.model.Lecture;
 import swm11.jdk.jobtreaming.back.app.lecture.service.LectureService;
 import swm11.jdk.jobtreaming.back.app.user.model.MyUserDetails;
+import swm11.jdk.jobtreaming.back.exception.InvalidLectureAccessException;
 import swm11.jdk.jobtreaming.back.utils.LectureUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,11 +58,9 @@ public class LectureController {
 
     @ApiOperation("새로운 강연 추가")
     @PostMapping(value = "/add")
-    public ResponseEntity add(@RequestBody Lecture lecture) throws InvalidKeyException, NoSuchAlgorithmException {
+    public ResponseEntity add(@RequestBody Lecture lecture) {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         lecture.setExpert(userDetails.getExpert());
-        lecture = lectureService.save(lecture);
-        lecture.setPassword(String.valueOf(LectureUtils.generatePassword(String.valueOf(lecture.getId()))));
         return ResponseEntity.ok(lectureService.save(lecture));
     }
 
@@ -76,17 +76,52 @@ public class LectureController {
 
     @ApiOperation("강연 참여")
     @PostMapping(value = "/join")
-    public ResponseEntity join(HttpServletRequest request) throws NoSuchAlgorithmException, InvalidKeyException {
+    public ResponseEntity join(HttpServletRequest request) throws InvalidKeyException, NoSuchAlgorithmException {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = userDetails.getId();
         Long lectureId = Long.valueOf(request.getHeader("lectureId"));
-        lectureService.isValidUser(lectureId, userDetails.getUser()).orElseThrow(InvalidKeyException::new);
-
         String password = request.getHeader("password");
-        if (LectureUtils.enableJoin(lectureId, password)) {
-            return ResponseEntity.ok().build();
+        Lecture lecture = lectureService.findById(lectureId).orElseThrow(InvalidLectureAccessException::new);
+
+        if (LectureUtils.enableJoin(password, lectureId)) {
+            return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.badRequest().build();
+        if (lecture.getExpert().getId().equals(userId)) {
+            return ResponseEntity.ok(true);
+        } else {
+            boolean isValid = lecture.getStudents().stream().map(Common::getId).anyMatch(i -> i.equals(userId));
+            return isValid ? ResponseEntity.ok(false) : ResponseEntity.badRequest().build();
+        }
+
     }
+
+    /*
+    private ExpertService expertService;
+
+    @ApiOperation("테스트 강연 생성")
+    @GetMapping(value = "/test")
+    public ResponseEntity test(@RequestParam(value = "title") String title) throws InvalidKeyException, NoSuchAlgorithmException {
+        Expert expert = expertService.findById(new Long(1)).get();
+        Lecture lecture = new Lecture();
+        lecture.setExpert(expert);
+        lecture.setTitle(title);
+        lecture.setCategory(Category.IT);
+        lecture.setTarget("타겟");
+        lecture.setStartedAt(LocalDateTime.now());
+        lecture.setEndedAt(LocalDateTime.now());
+        lecture.setMaxNum(10);
+        lecture.setPrice(10000);
+        lecture.setTimetable("시간표");
+        lecture.setOverview("개요");
+        lecture.setContents("내용");
+        lecture.setStatus(LectureStatus.COMPLETE);
+        lecture.setKeywords("키워드");
+        lecture.setAvgRating(0);
+        lecture = lectureService.save(lecture);
+        lectureService.save(lecture);
+        return ResponseEntity.ok().build();
+    }
+    */
 
 }

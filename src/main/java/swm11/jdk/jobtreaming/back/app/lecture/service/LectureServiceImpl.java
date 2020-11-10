@@ -16,6 +16,11 @@ public class LectureServiceImpl implements LectureService {
     private LectureRepository lectureRepository;
 
     @Override
+    public Optional<Lecture> findById(Long id) {
+        return lectureRepository.findById(id);
+    }
+
+    @Override
     public List<Lecture> findAllByQuery(String query) {
         return lectureRepository.findAllByTitleContaining(query);
     }

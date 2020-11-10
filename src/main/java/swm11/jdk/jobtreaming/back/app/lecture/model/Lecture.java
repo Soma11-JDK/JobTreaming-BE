@@ -1,5 +1,6 @@
 package swm11.jdk.jobtreaming.back.app.lecture.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -22,8 +23,10 @@ import java.util.List;
 @Getter
 @DynamicInsert
 @DynamicUpdate
+@Setter
 public class Lecture extends Common implements Serializable {
 
+    @JsonIgnore
     @Setter
     @ManyToOne
     @JoinColumn(nullable = false, referencedColumnName = "id")
@@ -60,11 +63,13 @@ public class Lecture extends Common implements Serializable {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String contents;                                            // 강의 소개
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "lecture_student", joinColumns = @JoinColumn(name = "lecture_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> students = new ArrayList<>();                    // 신청자
 
+    @JsonIgnore
     @OneToMany(mappedBy = "lecture")
     private List<LectureQuestion> questionList = new ArrayList<>();     // 질문 목록
 
@@ -73,6 +78,7 @@ public class Lecture extends Common implements Serializable {
     @Enumerated(EnumType.STRING)
     private LectureStatus status;                                       // 강연 상태
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "lecture_likes", joinColumns = @JoinColumn(name = "lecture_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
@@ -87,7 +93,4 @@ public class Lecture extends Common implements Serializable {
     @Column(columnDefinition = "double precision default '0'")
     private double avgRating;                                           // 평균 평점
 
-    @Setter
-    @Column(nullable = false)
-    private String password;                                            // 강연 비밀번호
 }

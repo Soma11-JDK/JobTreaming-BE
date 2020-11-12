@@ -32,6 +32,10 @@ public class Lecture extends Common implements Serializable {
     @JoinColumn(nullable = false, referencedColumnName = "id")
     private Expert expert;                                            // 강연자
 
+    @Setter
+    @Transient
+    private String expertName;                                          // 강연자 이름
+
     @Column(nullable = false, length = 100)
     private String title;                                               // 제목
 

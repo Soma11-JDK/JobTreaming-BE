@@ -5,13 +5,16 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import swm11.jdk.jobtreaming.back.app.common.model.Common;
 import swm11.jdk.jobtreaming.back.app.lecture.model.Lecture;
+import swm11.jdk.jobtreaming.back.app.lecture.model.LectureResponse;
 import swm11.jdk.jobtreaming.back.app.lecture.service.LectureService;
 import swm11.jdk.jobtreaming.back.app.user.model.MyUserDetails;
-import swm11.jdk.jobtreaming.back.exception.InvalidLectureAccessException;
+import swm11.jdk.jobtreaming.back.app.user.service.UserService;
+import swm11.jdk.jobtreaming.back.exception.LectureNotFoundException;
+import swm11.jdk.jobtreaming.back.exception.UserNotFoundException;
 import swm11.jdk.jobtreaming.back.utils.LectureUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +30,7 @@ import java.util.stream.Collectors;
 public class LectureController {
 
     private LectureService lectureService;
+    private UserService userService;
 
     @ApiOperation("강연 목록 조회")
     @GetMapping(value = "/listAll")
@@ -56,7 +60,16 @@ public class LectureController {
         return ResponseEntity.ok(lectureList);
     }
 
+    @ApiOperation("특정 강연 상세 조회")
+    @GetMapping(value = "/{id}")
+    public ResponseEntity findById(@PathVariable("id") Long id) {
+        Lecture lecture = lectureService.findById(id).orElseThrow(LectureNotFoundException::new);
+        lecture.setExpertName(userService.findById(lecture.getId()).orElseThrow(() -> new UserNotFoundException("")).getName());
+        return ResponseEntity.ok(lecture);
+    }
+
     @ApiOperation("새로운 강연 추가")
+    @PreAuthorize("hasRole('ROLE_EXPERT')")
     @PostMapping(value = "/add")
     public ResponseEntity add(@RequestBody Lecture lecture) {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -65,6 +78,7 @@ public class LectureController {
     }
 
     @ApiOperation("강연 내용 수정")
+    @PreAuthorize("hasRole('ROLE_EXPERT')")
     @PostMapping(value = "/modify")
     public ResponseEntity modify(@RequestBody Lecture lecture) {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -75,23 +89,24 @@ public class LectureController {
     }
 
     @ApiOperation("강연 참여")
-    @PostMapping(value = "/join")
+    @PreAuthorize("hasRole('ROLE_EXPERT') or hasRole('ROLE_USER')")
+    @GetMapping(value = "/join")
     public ResponseEntity join(HttpServletRequest request) throws InvalidKeyException, NoSuchAlgorithmException {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userDetails.getId();
-        Long lectureId = Long.valueOf(request.getHeader("lectureId"));
-        String password = request.getHeader("password");
-        Lecture lecture = lectureService.findById(lectureId).orElseThrow(InvalidLectureAccessException::new);
+        Long lectureId = Long.valueOf(request.getParameter("lectureId"));
+        String password = request.getParameter("password");
+        Lecture lecture = lectureService.findById(lectureId).orElseThrow(LectureNotFoundException::new);
 
         if (LectureUtils.enableJoin(password, lectureId)) {
             return ResponseEntity.badRequest().build();
         }
 
         if (lecture.getExpert().getId().equals(userId)) {
-            return ResponseEntity.ok(true);
+            return ResponseEntity.ok(LectureResponse.builder().name(userDetails.getName()).isExpert(true).build());
         } else {
-            boolean isValid = lecture.getStudents().stream().map(Common::getId).anyMatch(i -> i.equals(userId));
-            return isValid ? ResponseEntity.ok(false) : ResponseEntity.badRequest().build();
+            boolean isValid = lectureService.isValidUser(lectureId, userDetails.getUser()).isPresent();
+            return isValid ? ResponseEntity.ok(LectureResponse.builder().name(userDetails.getName()).isExpert(false).build()) : ResponseEntity.badRequest().build();
         }
 
     }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info" monitorInterval="30">
+    <Properties>
+        <property name="LOG_PATH" value="./logs/swm11/"/>
+        <property name="LOG_PATTERN" value="%-5level %d{yyyy-MM-dd HH:mm:ss} [%thread] %logger[%method:%line] - %msg%n"/>
+        <property name="LOG_LEVEL" value="debug"/>
+        <property name="CONSOLE_APPENDER" value="Console"/>
+        <property name="IS_ADDITIVE" value="false"/>
+    </Properties>
+
+    <Appenders>
+
+        <Console name="${CONSOLE_APPENDER}" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+
+        <!-- Log everything in custom package -->
+        <Logger name="swm11.jdk.jobtreaming.back" level="${LOG_LEVEL}" additivity="${IS_ADDITIVE}">
+            <AppenderRef ref="${CONSOLE_APPENDER}"/>
+        </Logger>
+
+        <!-- Log everything in Spring Boot -->
+        <Logger name="org.springframework.boot" level="${LOG_LEVEL}" additivity="${IS_ADDITIVE}">
+            <AppenderRef ref="${CONSOLE_APPENDER}"/>
+        </Logger>
+
+        <!-- Log everything in Spring Core -->
+        <Logger name="org.springframework.core" level="${LOG_LEVEL}" additivity="${IS_ADDITIVE}">
+            <AppenderRef ref="${CONSOLE_APPENDER}"/>
+        </Logger>
+
+        <logger name="com.zaxxer.hikari.pool" level="${LOG_LEVEL}" additivity="${IS_ADDITIVE}">
+        </logger>
+
+        <Root level="${LOG_LEVEL}">
+            <AppenderRef ref="${CONSOLE_APPENDER}"/>
+        </Root>
+
+    </Loggers>
+
+</Configuration>

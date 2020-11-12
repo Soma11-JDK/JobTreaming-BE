@@ -1,5 +1,6 @@
 package swm11.jdk.jobtreaming.back.app.expert.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
@@ -22,10 +23,12 @@ public class Expert extends Common implements Serializable {
     @Column(nullable = false, columnDefinition = "TEXT default ''")
     private String about = "";                                        // 소개글
 
-    @OneToMany(mappedBy = "expert")
+    @JsonIgnore
+    @OneToMany(mappedBy = "expert", fetch = FetchType.EAGER)
     private List<Lecture> lectureList = new ArrayList<>();            // 강연 목록
 
-    @OneToMany(mappedBy = "expert")
+    @JsonIgnore
+    @OneToMany(mappedBy = "expert", fetch = FetchType.EAGER)
     private List<Lecture> specificationList = new ArrayList<>();      // 스펙 목록
 
     @Setter

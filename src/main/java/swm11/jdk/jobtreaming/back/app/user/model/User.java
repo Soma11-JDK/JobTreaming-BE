@@ -43,7 +43,7 @@ public class User extends Common implements Serializable {
     private LocalDateTime birth;                                // 생년월일
 
     @Setter
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "expert_id", referencedColumnName = "id")
     private Expert expert;                                      // 전문가 정보
 
@@ -54,6 +54,6 @@ public class User extends Common implements Serializable {
 
     @Setter
     @Column(nullable = false)
-    private String imageURL;                                    // 이미지 경로
+    private String imageURL = "";                               // 이미지 경로
 
 }

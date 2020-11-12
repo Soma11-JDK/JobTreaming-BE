@@ -5,14 +5,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
-import swm11.jdk.jobtreaming.back.app.user.model.MyUserDetails;
 import swm11.jdk.jobtreaming.back.app.user.model.User;
 import swm11.jdk.jobtreaming.back.app.user.service.UserService;
-import swm11.jdk.jobtreaming.back.utils.TokenUtils;
+import swm11.jdk.jobtreaming.back.exception.UserNotFoundException;
 
 @Api(description = "사용자 API")
 @RestController
@@ -21,7 +17,6 @@ import swm11.jdk.jobtreaming.back.utils.TokenUtils;
 public class UserController {
 
     private UserService userService;
-    private UserDetailsService userDetailsService;
 
     @ApiOperation("회원 가입")
     @PostMapping(value = "/signUp")
@@ -68,16 +63,9 @@ public class UserController {
 
     @ApiOperation("소셜 로그인")
     @GetMapping(value = "/socialLogin")
-    public ResponseEntity socialLogin() {
-        MyUserDetails userDetails = (MyUserDetails) userDetailsService.loadUserByUsername("test");
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
-        return ResponseEntity.ok("테스트 로그인 성공");
-    }
-
-    @ApiOperation("테스트 로그인")
-    @GetMapping(value = "/testLogin")
-    public ResponseEntity testLogin() {
-        return ResponseEntity.ok(TokenUtils.generateJwtToken(userService.findByEmail("test@test.test").get()));
+    public ResponseEntity socialLogin(@RequestParam(value = "email") String email) {
+        User user = userService.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+        return ResponseEntity.ok(user);
     }
 
 }

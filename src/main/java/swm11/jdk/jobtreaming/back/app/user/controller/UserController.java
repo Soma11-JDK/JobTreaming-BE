@@ -7,8 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import swm11.jdk.jobtreaming.back.app.user.model.User;
+import swm11.jdk.jobtreaming.back.app.user.model.UserResponse;
 import swm11.jdk.jobtreaming.back.app.user.service.UserService;
 import swm11.jdk.jobtreaming.back.exception.UserNotFoundException;
+import swm11.jdk.jobtreaming.back.utils.TokenUtils;
 
 @Api(description = "사용자 API")
 @RestController
@@ -65,7 +67,13 @@ public class UserController {
     @GetMapping(value = "/socialLogin")
     public ResponseEntity socialLogin(@RequestParam(value = "email") String email) {
         User user = userService.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(UserResponse.builder().token(TokenUtils.generateJwtToken(user)).user(user).build());
+    }
+
+    @ApiOperation("테스트 로그인")
+    @GetMapping(value = "/testLogin")
+    public ResponseEntity testLogin() {
+        return ResponseEntity.ok(TokenUtils.generateJwtToken(userService.findByEmail("test@test.test").get()));
     }
 
 }

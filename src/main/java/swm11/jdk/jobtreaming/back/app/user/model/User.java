@@ -1,18 +1,16 @@
 package swm11.jdk.jobtreaming.back.app.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.format.annotation.DateTimeFormat;
 import swm11.jdk.jobtreaming.back.app.common.model.Common;
 import swm11.jdk.jobtreaming.back.app.expert.model.Expert;
-import swm11.jdk.jobtreaming.back.enums.gender.Gender;
 import swm11.jdk.jobtreaming.back.enums.user.UserRole;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user")
@@ -25,7 +23,7 @@ public class User extends Common implements Serializable {
     private String email;                                       // 사용자 이메일
 
     @Column(nullable = false)
-    private String pw;                                          // 사용자 비밀번호
+    private String pw = "";                                     // 사용자 비밀번호
 
     @Column(nullable = false, length = 20)
     private String name;                                        // 사용자 이름
@@ -33,15 +31,7 @@ public class User extends Common implements Serializable {
     @Column(nullable = false, length = 13)
     private String phone;                                       // 사용자 연락처
 
-    @Setter
-    @Column(nullable = false, length = 20)
-    @Enumerated(EnumType.STRING)
-    private Gender gender;                                      // 성별
-
-    @Column(length = 20)
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDateTime birth;                                // 생년월일
-
+    @JsonIgnore
     @Setter
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "expert_id", referencedColumnName = "id")
@@ -50,7 +40,7 @@ public class User extends Common implements Serializable {
     @Setter
     @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
-    private UserRole role;                                      // 사용자 역할할
+    private UserRole role;                                      // 사용자 역할
 
     @Setter
     @Column(nullable = false)

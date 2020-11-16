@@ -18,12 +18,25 @@ import java.io.InputStream;
 public class ImageController {
 
     @GetMapping(value = "/category/{fileName}")
-    public HttpEntity<byte[]> getStoreImage(@PathVariable("fileName") String fileName) throws IOException {
+    public HttpEntity<byte[]> getCategoryImage(@PathVariable("fileName") String fileName) throws IOException {
         InputStream in = getClass().getResourceAsStream("/static/category/" + fileName);
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(fileName.contains("png") ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG);
+        final HttpHeaders headers = createHttpHeaders(fileName);
         byte[] image = org.apache.commons.io.IOUtils.toByteArray(in);
         return new HttpEntity<>(image, headers);
+    }
+
+    @GetMapping(value = "/lecture/{fileName}")
+    public HttpEntity<byte[]> getLectureImage(@PathVariable("fileName") String fileName) throws IOException {
+        InputStream in = getClass().getResourceAsStream("/static/lecture/" + fileName);
+        final HttpHeaders headers = createHttpHeaders(fileName);
+        byte[] image = org.apache.commons.io.IOUtils.toByteArray(in);
+        return new HttpEntity<>(image, headers);
+    }
+
+    private HttpHeaders createHttpHeaders(String fileName) {
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(fileName.contains("png") ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG);
+        return headers;
     }
 
 }

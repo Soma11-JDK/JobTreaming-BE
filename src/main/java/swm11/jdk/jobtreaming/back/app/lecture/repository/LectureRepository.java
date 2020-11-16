@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import swm11.jdk.jobtreaming.back.app.lecture.model.Lecture;
 import swm11.jdk.jobtreaming.back.app.user.model.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,4 +16,5 @@ public interface LectureRepository extends JpaRepository <Lecture, Long> {
 
     Optional<Lecture> findByIdAndStudentsContaining(Long lectureId, User user);
 
+    List<Lecture> findAllByStudentsContainingAndStartedAtAfter(User user, LocalDateTime now);
 }

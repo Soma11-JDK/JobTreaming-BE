@@ -8,6 +8,7 @@ import lombok.Getter;
 public class LectureResponse {
 
     private String name;
+    private Long expertId;
     private boolean isExpert;
 
 }

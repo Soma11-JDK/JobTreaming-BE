@@ -3,6 +3,7 @@ package swm11.jdk.jobtreaming.back.app.lecture.service;
 import swm11.jdk.jobtreaming.back.app.lecture.model.Lecture;
 import swm11.jdk.jobtreaming.back.app.user.model.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,4 +18,6 @@ public interface LectureService {
     Lecture save(Lecture lecture);
 
     Optional<Lecture> isValidUser(Long lectureId, User user);
+
+    List<Lecture> findMyAvailableList(User user);
 }

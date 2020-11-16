@@ -67,6 +67,10 @@ public class Lecture extends Common implements Serializable {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String contents;                                            // 강의 소개
 
+    @Setter
+    @Column(nullable = false)
+    private String fileName = "";                                       // 이미지 경로
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "lecture_student", joinColumns = @JoinColumn(name = "lecture_id"),

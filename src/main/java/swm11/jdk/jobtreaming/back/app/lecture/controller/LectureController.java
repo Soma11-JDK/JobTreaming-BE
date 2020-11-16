@@ -60,6 +60,15 @@ public class LectureController {
         return ResponseEntity.ok(lectureList);
     }
 
+    @ApiOperation("나의 강연 목록 조회")
+    @PreAuthorize("hasRole('ROLE_EXPERT') or hasRole('ROLE_USER')")
+    @GetMapping(value = "/myList")
+    public ResponseEntity myList() {
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Lecture> lectureList = lectureService.findMyAvailableList(userDetails.getUser());
+        return ResponseEntity.ok(lectureList);
+    }
+
     @ApiOperation("특정 강연 상세 조회")
     @GetMapping(value = "/{id}")
     public ResponseEntity findById(@PathVariable("id") Long id) {
@@ -106,7 +115,7 @@ public class LectureController {
             return ResponseEntity.ok(LectureResponse.builder().name(userDetails.getName()).isExpert(true).build());
         } else {
             boolean isValid = lectureService.isValidUser(lectureId, userDetails.getUser()).isPresent();
-            return isValid ? ResponseEntity.ok(LectureResponse.builder().name(userDetails.getName()).isExpert(false).build()) : ResponseEntity.badRequest().build();
+            return isValid ? ResponseEntity.ok(LectureResponse.builder().name(userDetails.getName()).isExpert(false).expertId(lecture.getExpert().getId()).build()) : ResponseEntity.badRequest().build();
         }
 
     }

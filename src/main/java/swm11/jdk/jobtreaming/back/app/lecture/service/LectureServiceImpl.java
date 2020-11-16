@@ -6,6 +6,8 @@ import swm11.jdk.jobtreaming.back.app.lecture.model.Lecture;
 import swm11.jdk.jobtreaming.back.app.lecture.repository.LectureRepository;
 import swm11.jdk.jobtreaming.back.app.user.model.User;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +30,11 @@ public class LectureServiceImpl implements LectureService {
     @Override
     public List<Lecture> findAll() {
         return lectureRepository.findAll();
+    }
+
+    @Override
+    public List<Lecture> findMyAvailableList(User user) {
+        return lectureRepository.findAllByStudentsContainingAndStartedAtAfter(user, LocalDateTime.now());
     }
 
     @Override

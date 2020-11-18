@@ -38,7 +38,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns(Arrays.asList("/question/listAll", "/question/myList", "/question/add", "/question/modify", "/question/delete"))
                 .addPathPatterns(Arrays.asList("/review/listAll", "/review/myList", "/review/add", "/review/modify", "/review/delete"))
                 .addPathPatterns(Arrays.asList("/petition/add", "/petition/modify", "/petition/delete"))
-                .addPathPatterns(Arrays.asList("/lecture/add", "/lecture/modify", "/lecture/join"))
+                .addPathPatterns(Arrays.asList("/lecture/add", "/lecture/modify", "/lecture/join", "/lecture/myList"))
                 .addPathPatterns(Arrays.asList("/user/modify", "/user/delete"));
     }
 

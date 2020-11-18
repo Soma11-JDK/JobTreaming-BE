@@ -1,8 +1,6 @@
 package swm11.jdk.jobtreaming.back.app.common.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,11 +11,13 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Getter
 @NoArgsConstructor
+@RequiredArgsConstructor
 public abstract class Common implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
+    @NonNull
     private Long id;                                        // 고유번호
 
     @CreationTimestamp

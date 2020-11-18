@@ -61,7 +61,7 @@ public class Lecture extends Common implements Serializable {
     @Column(nullable = false, length = 100)
     private String timetable;                                           // 타임 테이블
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String overview;                                            // 강의 개요
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -100,5 +100,13 @@ public class Lecture extends Common implements Serializable {
 
     @Column(columnDefinition = "double precision default '0'")
     private double avgRating;                                           // 평균 평점
+
+    public Lecture() {
+        super();
+    }
+
+    public Lecture(Long id) {
+        super(id);
+    }
 
 }

@@ -35,4 +35,13 @@ public class Expert extends Common implements Serializable {
     @OneToOne
     @JoinColumn(name = "expert_rating_id", referencedColumnName = "id")
     private ExpertRating expertRating;                                // 전문가 정보
+
+    public Expert() {
+        super();
+    }
+
+    public Expert(Long id) {
+        super(id);
+    }
+
 }

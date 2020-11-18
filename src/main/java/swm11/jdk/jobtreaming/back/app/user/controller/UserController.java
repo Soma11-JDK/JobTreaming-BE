@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import swm11.jdk.jobtreaming.back.app.user.model.User;
 import swm11.jdk.jobtreaming.back.app.user.model.UserResponse;
 import swm11.jdk.jobtreaming.back.app.user.service.UserService;
+import swm11.jdk.jobtreaming.back.enums.user.UserRole;
 import swm11.jdk.jobtreaming.back.exception.UserNotFoundException;
 import swm11.jdk.jobtreaming.back.utils.TokenUtils;
 
@@ -23,7 +24,9 @@ public class UserController {
     @ApiOperation("회원 가입")
     @PostMapping(value = "/signUp")
     public ResponseEntity signUp(@RequestBody User user) {
-        return ResponseEntity.ok(userService.save(user));
+        user.setRole(UserRole.ROLE_USER);
+        user = userService.save(user);
+        return ResponseEntity.ok(UserResponse.builder().token(TokenUtils.generateJwtToken(user)).user(user).build());
     }
 
     @ApiOperation("이메일을 통한 사용자 정보 조회")
@@ -49,14 +52,13 @@ public class UserController {
     }
 
     @ApiOperation("특정 사용자 수정")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_EXPERT')")
     @PostMapping(value = "/modify")
     public ResponseEntity modify(@RequestBody User user) {
         return ResponseEntity.ok(userService.save(user));
     }
 
     @ApiOperation("특정 사용자 삭제")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/delete/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id) {
         userService.delete(id);

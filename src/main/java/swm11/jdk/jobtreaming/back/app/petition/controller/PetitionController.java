@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import swm11.jdk.jobtreaming.back.app.petition.model.Petition;
 import swm11.jdk.jobtreaming.back.app.petition.service.PetitionService;
 import swm11.jdk.jobtreaming.back.app.user.model.MyUserDetails;
-import swm11.jdk.jobtreaming.back.app.user.service.UserService;
 
 import java.util.List;
 
@@ -22,7 +21,6 @@ import java.util.List;
 public class PetitionController {
 
     private PetitionService petitionService;
-    private UserService userService;
 
     @ApiOperation("전체 강연 청원 목록 조회")
     @GetMapping(value = "/list")
@@ -39,7 +37,7 @@ public class PetitionController {
     }
 
     @ApiOperation("새로운 강연 청원 추가")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_EXPERT')")
     @PostMapping(value = "/add")
     public ResponseEntity add(@RequestBody Petition petition) {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
